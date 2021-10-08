@@ -7,36 +7,29 @@ $errors = [];
 
 if(isset($_POST['token']) && $_POST['token'] === $_SESSION['token']){
 
-    if(strlen($_POST['pseudo']) < 3 || strlen($_POST['pseudo']) > 30){
-        $errors['pseudo'] = 'Votre Pseudo doit contenir minimum 3 caractères et maximum 30 caracteres !';
-      }
-        
-        if(isset($_POST['pseudo']) && !empty($_POST['pseudo'])){
-            dump($_POST); 
-            
-        }
-        if(isset($_POST['email']) && !empty($_POST['email'])){
-           dump($_POST ,true); 
-            
-        }
-        if(isset($_POST['password1']) && !empty($_POST['password1']) && $_POST['password1'] === $_POST['password2']){
-            
-        }
+  if(strlen($_POST['pseudo']) < 3 || strlen($_POST['pseudo']) > 30){
+      $errors['pseudo'] = 'Votre Pseudo doit contenir minimum 3 caractères et maximum 30 caracteres !';
+  }
+    
+  if(isset($_POST['email']) && !preg_match('#^[\w.-]+@[\w.-]+\.[a-z]{2,6}$#i', $_POST['email'])){
+    $errors['email'] = 'Votre Pseudo doit contenir minimum 3 caractères et maximum 30 caracteres !'; 
+  }
 
-        if (empty($errors)) {
-          $password_hash = password_hash($_POST['password1'], PASSWORD_DEFAULT);
-          dump($password_hash);
-          $sql= "INSERT INTO users(email, password, pseudo, roles) VALUES ('value-1','".$password_hash."','value-3','".json_encode(['ROLE_USER'])."')";
-          if ($mysqli->query($sql) === true) {
-            redirectToRoute();
-          } else {
-            echo 'gg';
-          }
-        }
-        else {
-          echo 'pas bon :/';
-        }
-      }
+  if(isset($_POST['password1']) && !empty($_POST['password1']) && $_POST['password1'] === $_POST['password2']){
+    $password_hash = password_hash($_POST['password1'], PASSWORD_DEFAULT);
+  } else {
+    $errors['password'] = 'Les mots de passe ne sont pas identiques !!!';
+  }
+
+  if (empty($errors)) {
+    $sql= "INSERT INTO users(email, password, pseudo, roles) VALUES ('".$_POST['email']."','".$password_hash."','".$_POST['pseudo']."','".json_encode(['ROLE_USER'])."')";
+    if ($mysqli->query($sql) === true) {
+      redirectToRoute();
+    } else {
+      echo 'une erreur est survenue. Veuillez recommnecer';
+    }
+  }
+}
 
 ?>
 
