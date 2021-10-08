@@ -89,14 +89,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['token']) {
             </div>
           </div>
 
-          <div class="d-flex flex-row align-items-center mb-4">
-            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
-            <div class="form-outline flex-fill mb-0">
-              <input type="password"  class="form-control" name="passwordConf" id="passwordConf"/>
-              <label class="form-label" for="passwordConf"
-                >Confirmer votre mot de passe</label
-              >
-            </div>
+          
           </div>
 
           <div class="d-flex justify-content-center m-4">
