@@ -12,14 +12,16 @@ $errors = [];
           //$password = stripslashes($_REQUEST['password1']);
           //$password = mysqli_real_escape_string($sql, $password1);
           $query = "SELECT * FROM `users` WHERE email='".$email."'";
-            
-
 
           if ($result = $mysqli->query($query)) {
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    
-                  dump($row);
+                  if (password_verify($_POST['password1'], $row['password'])) {
+                    $_SESSION['user'] = $row;
+                    redirectToRoute('/compte.php');
+                  } else {
+                    echo 'compter non reconnu';
+                  }
                 }
             }
             $result->close();
