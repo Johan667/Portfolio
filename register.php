@@ -54,13 +54,13 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['token']) {
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
     />
 
-    <title>S'identifier</title>
+    <title>Register</title>
   </head>
   <body>
     <div class="m-a">
       <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1 m-auto">
         <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
-          Identifiez Vous 
+          Créer un compte
         </p>
 
         <form class="mx-1 mx-md-4" method="post" >
