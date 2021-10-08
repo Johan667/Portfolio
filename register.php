@@ -18,7 +18,7 @@ if(isset($_POST['token']) && $_POST['token'] === $_SESSION['token']){
   if(isset($_POST['password1']) && !empty($_POST['password1']) && $_POST['password1'] === $_POST['password2']){
     $password_hash = password_hash($_POST['password1'], PASSWORD_DEFAULT);
   } else {
-    $errors['password'] = 'Les mots de passe ne sont pas identiques !!!';
+    $errors['password1'] = 'Les mots de passe ne sont pas identiques !';
   }
 
   if (empty($errors)) {
@@ -26,7 +26,7 @@ if(isset($_POST['token']) && $_POST['token'] === $_SESSION['token']){
     if ($mysqli->query($sql) === true) {
       redirectToRoute();
     } else {
-      echo 'une erreur est survenue. Veuillez recommnecer';
+      echo 'une erreur est survenue. Veuillez recommencer';
     }
   }
 }
