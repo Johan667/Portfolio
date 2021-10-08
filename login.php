@@ -6,12 +6,26 @@ require_once 'config/connect.php';
 $errors = [];
 
 
-        if (isset($_POST['pseudo'])){
-          $username = stripslashes($_REQUEST['pseudo']);
-          $username = mysqli_real_escape_string($sql, $pseudo);
-          $password = stripslashes($_REQUEST['password1']);
-          $password = mysqli_real_escape_string($sql, $password1);
-            $query = "SELECT * FROM `users` WHERE username='$pseudo' and password='".password_verify('token', $password1)."'";
+        if (isset($_POST['email'])){
+          $email = strip_tags(stripslashes($_REQUEST['email']));
+          //$username = mysqli_real_escape_string($sql, $_POST['email']);
+          //$password = stripslashes($_REQUEST['password1']);
+          //$password = mysqli_real_escape_string($sql, $password1);
+          $query = "SELECT * FROM `users` WHERE email='".$email."'";
+            
+
+
+          if ($result = $mysqli->query($query)) {
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    
+                  dump($row);
+                }
+            }
+            $result->close();
+        }
+
+          /*
           $result = mysqli_query($sql,$query) ;
           $rows = mysqli_num_rows($result);
           if($mysqli->query($sql) === true) {
@@ -19,6 +33,7 @@ $errors = [];
           }else{
             $message = "Le nom d'utilisateur ou le mot de passe est incorrect.";
           }
+          */
         }
       
 
