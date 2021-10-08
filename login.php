@@ -8,9 +8,6 @@ $errors = [];
 
         if (isset($_POST['email'])){
           $email = strip_tags(stripslashes($_REQUEST['email']));
-          //$username = mysqli_real_escape_string($sql, $_POST['email']);
-          //$password = stripslashes($_REQUEST['password1']);
-          //$password = mysqli_real_escape_string($sql, $password1);
           $query = "SELECT * FROM `users` WHERE email='".$email."'";
 
           if ($result = $mysqli->query($query)) {
@@ -20,22 +17,13 @@ $errors = [];
                     $_SESSION['user'] = $row;
                     redirectToRoute('/compte.php');
                   } else {
-                    echo 'compter non reconnu';
+                    echo 'compte non reconnu';
                   }
                 }
             }
             $result->close();
         }
 
-          /*
-          $result = mysqli_query($sql,$query) ;
-          $rows = mysqli_num_rows($result);
-          if($mysqli->query($sql) === true) {
-                redirectToRoute();
-          }else{
-            $message = "Le nom d'utilisateur ou le mot de passe est incorrect.";
-          }
-          */
         }
       
 
