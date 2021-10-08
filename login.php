@@ -8,20 +8,19 @@ $errors = [];
 
         if (isset($_POST['pseudo'])){
           $username = stripslashes($_REQUEST['pseudo']);
-          $username = mysqli_real_escape_string($conn, $pseudo);
+          $username = mysqli_real_escape_string($sql, $pseudo);
           $password = stripslashes($_REQUEST['password1']);
-          $password = mysqli_real_escape_string($conn, $password1);
+          $password = mysqli_real_escape_string($sql, $password1);
             $query = "SELECT * FROM `users` WHERE username='$pseudo' and password='".password_verify('token', $password1)."'";
-          $result = mysqli_query($conn,$query) or die(mysql_error());
+          $result = mysqli_query($sql,$query) ;
           $rows = mysqli_num_rows($result);
-          if($rows==1){
-              $_SESSION['pseudo'] = $pseudo;
-              header("Location: index.php");
+          if($mysqli->query($sql) === true) {
+                redirectToRoute();
           }else{
             $message = "Le nom d'utilisateur ou le mot de passe est incorrect.";
           }
         }
- 
+      
 
 ?>
 
