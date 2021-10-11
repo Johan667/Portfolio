@@ -12,6 +12,7 @@ require_once 'config/connect.php';
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="index.css" />
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
@@ -38,10 +39,10 @@ require_once 'config/connect.php';
           Espace Membre
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">M'inscrire</a>
-          <a class="dropdown-item" href="#">Connexion</a>
+          <a class="dropdown-item" href="register.php">M'inscrire</a>
+          <a class="dropdown-item" href="login.php">Connexion</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Deconnexion</a>
+          <a class="dropdown-item" href="deConnexion.php">Deconnexion</a>
         </div>
       </li>
       
@@ -50,10 +51,28 @@ require_once 'config/connect.php';
   </div>
 </nav>
 
+<p>Notez le site</p>
 
+<span class="C2etoiles"><div>1</div>
+    
+    <span class="C2etoiles"><div>2</div>
+        
+        <span class="C2etoiles"><div>3</div>
+            
+            <span class="C2etoiles"><div>4</div>
+                
+                <span class="C2etoiles"><div>5</div> <!-- les div ici permettent l'affichage de l'étoile via la propriété "content", avec le sélecteur ".C2etoiles div::after" -->
+                </span>
+            </span>
+        </span>
+    </span>
+</span>
 
-
-
+<h1>Bienvenue!</h1>
+        <p>Choisissez une option:</p>
+        <a href="register.php">S'inscrire</a>
+        <br>
+        <a href="login.php">Se connecter</a>
 
 
 
