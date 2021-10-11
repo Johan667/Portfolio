@@ -1,0 +1,16 @@
+
+.C2etoiles{
+    background:red;
+    display:inline-block;
+    cursor:pointer;
+}
+.C2etoiles:hover{
+    background:green;
+}
+.C2etoiles div{
+    display:inline-block;
+    padding:5px;
+}
+.C2etoiles div::after{
+    content:"\002605"; /* une étoile en Unicode */
+}

@@ -1,28 +1,32 @@
 <?php
-
 require_once 'config/framework.php';
 require_once 'config/connect.php';
 
-if (!isset($_SESSION['user'])) {
-    redirectToRoute();
-}
-
-
-dump($_SESSION['user']);
-echo 'bonjour '.$_SESSION['user']['pseudo'];
-
+// calculator pour eviter les robot : input ou je demande de faire un calcul et d'ecrire la reponse //
 
 $error=null;
 
+if(isset($_POST['token']) && $_POST['token'] === $_SESSION['token']){
 
-  
+    if(strlen($_POST['pseudo']) < 3 || strlen($_POST['pseudo']) > 30){
+        echo '!! Erreur';
+        }
+        
+        
+        if(isset($_POST['pseudo']) && !empty($_POST['pseudo'])){
+            var_dump($_POST); 
+            echo "<br>Veuillez remplir le champ";
+        }
+        if(isset($_POST['email']) && !empty($_POST['email'])){
+            var_dump($_POST); 
+            echo "<br>Veuillez remplir le champ";
+        }
+        if(isset($_POST['password1']) && !empty($_POST['password1']) && $_POST['password1'] === $_POST['password2']){
+            echo'boulette';
+        }
+        
 
-$sql = mysql_query("SELECT password FROM users WHERE mail = '" . $email ."'");
-
-list($password) = mysql_fetch_array($sql);
-
- $query  = mysql_query("UPDATE users SET password = '. $pass .'  WHERE mail = '". $email ."'");
-
+}
 
 
 
@@ -30,6 +34,8 @@ list($password) = mysql_fetch_array($sql);
 
 
 ?>
+
+
 
 
 
@@ -43,10 +49,10 @@ list($password) = mysql_fetch_array($sql);
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
-    <title>Tableau de bord </title>
+    <title>Connectez Vous!</title>
   </head>
   <body>
-    <h1>Modification du compte</h1>
+    <h1>Inscriver vous!</h1>
 
 
 
@@ -55,25 +61,22 @@ list($password) = mysql_fetch_array($sql);
 
   <div class="form-group">
 
-  <label for="pseudo">Modifier mon Pseudo</label>
+  <label for="pseudo">Pseudo</label>
     <input type="text" class="form-control" id="pseudo" name="pseudo" >
     
-    <label for="exampleInputEmail1">Modifier mon Adresse e-mail</label>
+    <label for="exampleInputEmail1">Adresse e-mail</label>
     <input type="email" class="form-control" id="Email1" aria-describedby="emailHelp" name="email">
     <small id="emailHelp" class="form-text text-muted">Entrez une adresse valide svp</small>
   </div>
   <div class="form-group">
-    <label for="exampleInputPassword1">Ancien Mot de passe</label>
+    <label for="exampleInputPassword1">Mot de passe</label>
     <input type="password" class="form-control" id="exampleInputPassword1" name="password1">
   </div>
-  <label for="exampleInputPassword2">Nouveau mot de passe</label>
-    <input type="password" class="form-control" id="exampleInputPassword2" name="password2">
-  </div><br>
-  <label for="exampleInputPassword2">Répétez le Nouveau mot de passe</label>
+  <label for="exampleInputPassword2">Répétez le mot de passe</label>
     <input type="password" class="form-control" id="exampleInputPassword2" name="password2">
   </div><br>
  
-  <button type="submit" class="btn btn-primary">Changez mes Informations</button>
+  <button type="submit" class="btn btn-primary">Me Connecter</button>
 
 </form>
 
