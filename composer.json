@@ -1,0 +1,19 @@
+{
+    "name": "stagiaire/portfolio",
+    "description": "portfolio",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Stagiaire\\Portfolio\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Johan667",
+            "email": "johan.kasri@icloud.com"
+        }
+    ],
+    "require-dev": {
+        "fzaninotto/faker": "^1.9"
+    }
+}
