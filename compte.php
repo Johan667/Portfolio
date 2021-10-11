@@ -9,7 +9,8 @@ if (!isset($_SESSION['user'])) {
 
 
 dump($_SESSION['user']);
-echo 'bonjour '.$_SESSION['user']['pseudo'];
+echo 'Bonjour '.$_SESSION['user']['pseudo'];
+
 
 
 
