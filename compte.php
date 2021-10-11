@@ -13,8 +13,6 @@ echo 'bonjour '.$_SESSION['user']['pseudo'];
 
 
 
-
-
 ?>
 
 
@@ -62,6 +60,10 @@ echo 'bonjour '.$_SESSION['user']['pseudo'];
  
   <button type="submit" class="btn btn-primary">Changez mes Informations</button>
 
+</form>
+<form action="" method="post">
+    <input type="hidden" name="datadelet" value="<?= $donnees['compte']; ?>">
+    <button type="submit" name="formdeleteuser">Supprimer le compte</button>
 </form>
 
     <!-- Optional JavaScript; choose one of the two! -->
