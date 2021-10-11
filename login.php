@@ -51,18 +51,20 @@ $errors = [];
         <form class="mx-1 mx-md-4" method="post" >
           <input type="hidden"name="token" value="<?= miniToken(); ?>">
 
+
+          <label class="form-label" for="email">E-mail</label>
           <div class="d-flex flex-row align-items-center mb-4">
             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-            <label class="form-label" for="email">E-mail</label>
             <div class="form-outline flex-fill mb-0">          
               <input type="email"  class="form-control" name="email" id="email"/>
               
             </div>
           </div>
 
+          <label class="form-label" for="password">Mot de passe</label>
           <div class="d-flex flex-row align-items-center mb-4">
+          
             <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-            <label class="form-label" for="password">Mot de passe</label>
             <div class="form-outline flex-fill mb-0">
               <input type="password"  class="form-control"  name="password1" id="password1"/>
              
