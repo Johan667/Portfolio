@@ -14,6 +14,7 @@ echo 'Bonjour '.$_SESSION['user']['pseudo'];
 
 
 
+
 ?>
 
 
