@@ -1,1 +1,4 @@
 config/db.php
+/server_distant/
+/vendor/
+/node_modules/

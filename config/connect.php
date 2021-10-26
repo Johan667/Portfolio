@@ -5,7 +5,7 @@ require_once 'db.php';
 $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 if ($mysqli->connect_error) {
-    die('connection failed : '.$mysqli->connect_error);
+    die('connection failed : ' . $mysqli->connect_error);
 }
 
 /**
@@ -15,7 +15,7 @@ if ($mysqli->connect_error) {
  *
  * @return array
  */
-function query(string $sql): array
+function query(string $sql, $unique = false): array
 {
     global $mysqli;
 
@@ -30,5 +30,18 @@ function query(string $sql): array
         $result->close();
     }
 
-    return $results;
+    return $unique === true && !empty($results) ? $results[0] : $results;
+}
+
+
+
+if (!isset($_SESSION['user'])) {
+    if (isset($_COOKIE['souvenir']) && !empty($_COOKIE['souvenir'])) {
+        $query = "SELECT * FROM users WHERE security='" . $_COOKIE['souvenir'] . "'";
+        $user = query($query, true);
+        if (!empty($user)) {
+            $_SESSION['user'] = $user;
+            redirectToRoute('/compte.php');
+        }
+    }
 }
