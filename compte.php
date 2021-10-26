@@ -3,83 +3,123 @@
 require_once 'config/framework.php';
 require_once 'config/connect.php';
 
+$errors = [];
+
+
 if (!isset($_SESSION['user'])) {
-    redirectToRoute();
+  redirectToRoute();
 }
 
 
-dump($_SESSION['user']);
-echo 'Bonjour '.$_SESSION['user']['pseudo'];
+
+
+
+// pour supprimer le compte
+if (isset($_POST['token_delete']) && $_POST['token_delete'] === $_SESSION['token_delete']) {
+  $sql = "DELETE FROM users WHERE id = '" . $_SESSION['user']['id'] . "'";
+  if ($mysqli->query($sql) === true) {
+    redirectToRoute('/deconnexion.php');
+  }
+}
+
+
+// pour modifier le pseudo 
+if (isset($_POST['token_pseudo']) && $_POST['token_pseudo'] === $_SESSION['token_pseudo']) {
+  if (strlen($_POST['pseudo']) < 3 || strlen($_POST['pseudo']) > 30) {
+    $errors['pseudo'] = 'Votre Pseudo doit contenir minimum 3 caractères et maximum 30 caracteres !';
+  }
+  if (empty($error)) {
+    $sql = "UPDATE users SET pseudo='" . $_POST['pseudo'] . "' WHERE id='" . $_SESSION['user']['id'] . "'";
+    if ($mysqli->query($sql) === true) {
+      $_SESSION['user']['pseudo'] = $_POST['pseudo'];
+    } else {
+      $errors['sql'] = 'une erreur est survenue. Veuillez recommencer';
+    }
+  }
+}
+
+
+// pour modifier l'email
+
+if (isset($_POST['token_email']) && $_POST['token_email'] === $_SESSION['token_email']) {
+  if (isset($_POST['email']) && preg_match('#^[\w.-]+@[\w.-]+\.[a-z]{2,6}$#i', $_POST['email'])) {
+    $errors['email'] = 'Votre Pseudo doit contenir minimum 3 caractères et maximum 30 caracteres !';
+    $sql = "UPDATE users SET email='" . $_POST['email'] . "' WHERE id = '" . $_SESSION['user']['id'] . "'";
+    if ($mysqli->query($sql) === true) {
+      redirectToRoute('/deconnexion.php');
+    } else {
+      echo 'une erreur est survenue. Veuillez recommencer';
+    }
+  }
+}
+
+// pour modifier le mdp
+if (isset($_POST['token_password']) && $_POST['token_password'] === $_SESSION['token_password']) {
+  $password_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+  $sql = "UPDATE users SET password='" . $password_hash . "' WHERE id = '" . $_SESSION['user']['id'] . "'";
+  if ($mysqli->query($sql) === true) {
+    redirectToRoute('/deconnexion.php');
+  } else {
+    echo 'une erreur est survenue. Veuillez recommencer';
+  }
+}
 
 
 
 
-
+require_once 'part/header.php';
 ?>
+<div id="hero" class="hero">
+  <header></header>
+
+  <main id="main">
+    <section class="site-section section-about text-center">
+      <div class="container my-5">
+        <h2> <strong> Ravi de vous revoir <?= $_SESSION['user']['pseudo']; ?></strong></h2><br>
+        <div class="row">
+
+          <div class="col-md-4 col-md-offset-4">
+
+            <form class="form-inline" method="post">
+              <div class="form-group mx-sm-3 mb-3">
+                <label for="emailmodif" class="sr-only">Email</label>
+                <input type="hidden" name="token_email" value="<?= miniToken('token_email'); ?>">
+                <input type="text" class="form-control" name="email" id="modifemail" placeholder="Nouvelle email">
+              </div>
+              <button type="submit" class="btn btn-secondary mb-2">Modifier L'email</button><br>
+            </form>
+
+            <form class="form-inline" method="post">
+              <div class="form-group mx-sm-3 mb-3">
+                <label for="pseudomodif" class="sr-only">Pseudo</label>
+                <input type="hidden" name="token_pseudo" value="<?= miniToken('token_pseudo'); ?>">
+                <input type="text" class="form-control" name="pseudo" id="modifpseudo" placeholder="Nouveau Pseudo">
+              </div>
+              <button type="submit" class="btn btn-secondary mb-2">Modifier le Pseudo</button><br>
+            </form>
+
+            <form class="form-inline" method="post">
+              <div class="form-group mx-sm-3 mb-3">
+                <label for="passwordmodif" class="sr-only">Mot de passe</label>
+                <input type="hidden" name="token_password" value="<?= miniToken('token_motdepasse'); ?>">
+                <input type="password" class="form-control" name="password" id="modifpassword" placeholder="Nouveau Mot de Passe">
+              </div>
+              <button type="submit" class="btn btn-secondary mb-2">Modifier le mot de passe</button><br>
+            </form><br>
+
+            <em>OU</em><br>
 
 
+            <form method="post" onclick="return confirm('Vous êtes sûre de vouloir nous quitter ? :(')">
 
+              <input type="hidden" name="token_delete" value="<?= miniToken('token_delete'); ?>">
+              <input type="submit" name="delete" value="Supprimer le Compte" class="btn btn-danger">
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            </form><br>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-
-    <title>Tableau de bord </title>
-  </head>
-  <body>
-    <h1>Modification du compte</h1>
-
-
-
-    <form method="POST">
-        <input type="hidden" name="token" value="<?= miniToken(); ?>">
-
-  <div class="form-group">
-
-  <label for="pseudo">Modifier mon Pseudo</label>
-    <input type="text" class="form-control" id="pseudo" name="pseudo" >
-    
-    <label for="exampleInputEmail1">Modifier mon Adresse e-mail</label>
-    <input type="email" class="form-control" id="Email1" aria-describedby="emailHelp" name="email">
-    <small id="emailHelp" class="form-text text-muted">Entrez une adresse valide svp</small>
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Ancien Mot de passe</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" name="password1">
-  </div>
-  <label for="exampleInputPassword2">Nouveau mot de passe</label>
-    <input type="password" class="form-control" id="exampleInputPassword2" name="password2">
-  </div><br>
-  <label for="exampleInputPassword2">Répétez le Nouveau mot de passe</label>
-    <input type="password" class="form-control" id="exampleInputPassword2" name="password2">
-  </div><br>
- 
-  <button type="submit" class="btn btn-primary">Changez mes Informations</button>
-
-</form><br>
-<form action="" method="post">
-    <input type="btn" name="datadelete" value="<?= $donnees['compte']; ?>">
-    <button type="submit" name="formdelete">Supprimer le compte</button>
-</form>
-
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
-    -->
-  </body>
+            <a href="politiquergpd.php">Politique de confidentialité</a>
+    </section>
+  </main>
+</div>
 
 </html>

@@ -1,97 +1,99 @@
 <?php
 require_once 'config/framework.php';
 require_once 'config/connect.php';
+require_once 'part/header.php';
 
-// calculator pour eviter les robot : input ou je demande de faire un calcul et d'ecrire la reponse //
 
-$error=null;
+$errors = [];
 
-if(isset($_POST['token']) && $_POST['token'] === $_SESSION['token']){
+if (isset($_POST['token']) && $_POST['token'] === $_SESSION['token']) {
 
-    if(strlen($_POST['pseudo']) < 3 || strlen($_POST['pseudo']) > 30){
-        echo '!! Erreur';
-        }
-        
-        
-        if(isset($_POST['pseudo']) && !empty($_POST['pseudo'])){
-            var_dump($_POST); 
-            echo "<br>Veuillez remplir le champ";
-        }
-        if(isset($_POST['email']) && !empty($_POST['email'])){
-            var_dump($_POST); 
-            echo "<br>Veuillez remplir le champ";
-        }
-        if(isset($_POST['password1']) && !empty($_POST['password1']) && $_POST['password1'] === $_POST['password2']){
-            echo'boulette';
-        }
-        
+  if (strlen($_POST['pseudo']) < 3 || strlen($_POST['pseudo']) > 30) {
+    $errors['pseudo'] = 'Votre Pseudo doit contenir minimum 3 caractères et maximum 30 caracteres !';
+  }
 
+  if (isset($_POST['email']) && !preg_match('#^[\w.-]+@[\w.-]+\.[a-z]{2,6}$#i', $_POST['email'])) {
+    $errors['email'] = 'Votre Pseudo doit contenir minimum 3 caractères et maximum 30 caracteres !';
+  }
+
+  if (isset($_POST['password1']) && !empty($_POST['password1']) && $_POST['password1'] === $_POST['password2']) {
+    $password_hash = password_hash($_POST['password1'], PASSWORD_DEFAULT);
+  } else {
+    $errors['password1'] = 'Les mots de passe ne sont pas identiques !';
+  }
+
+  if (empty($errors)) {
+    $sql = "INSERT INTO users(email, password, pseudo, roles) VALUES ('" . $_POST['email'] . "','" . $password_hash . "','" . $_POST['pseudo'] . "','" . json_encode(['ROLE_USER']) . "')";
+    if ($mysqli->query($sql) === true) {
+      redirectToRoute();
+    } else {
+      echo 'une erreur est survenue. Veuillez recommencer';
+    }
+  }
 }
-
-
-
-
-
 
 ?>
 
+<title>Inscrivez Vous !</title>
+
+
+
+<main id="main">
+  <section class="site-section section-about text-center">
+    <div class="container my-5">
+      <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+          <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+            Inscrivez vous !
+
+
+
+          <form method="POST">
+            <input type="hidden" name="token" value="<?= miniToken(); ?>">
+
+            <div class="form-group">
+
+              <label for="pseudo">Pseudo</label>
+              <input type="text" class="form-control" id="pseudo" name="pseudo">
+
+              <label for="exampleInputEmail1">Adresse e-mail</label>
+              <input type="email" class="form-control" id="Email1" aria-describedby="emailHelp" name="email">
+
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Mot de passe</label>
+              <input type="password" class="form-control" id="exampleInputPassword1" name="password1">
+            </div>
+            <label for="exampleInputPassword2">Répétez le mot de passe</label>
+            <input type="password" class="form-control" id="exampleInputPassword2" name="password2"><br>
+            <button type="submit" class="btn btn-secondary">M'inscrire</button>
+        </div>
 
 
 
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        </form>
+      </div>
 
-    <title>Connectez Vous!</title>
-  </head>
-  <body>
-    <h1>Inscriver vous!</h1>
+    </div>
+
+    </div>
+  </section>
+</main>
+<?php
 
 
+$pseudo = valid_donnees($_POST["pseudo"]);
+$email = valid_donnees($_POST["email"]);
+$password = valid_donnees($_POST["password"]);
 
-    <form method="POST">
-        <input type="hidden" name="token" value="<?= miniToken(); ?>">
-
-  <div class="form-group">
-
-  <label for="pseudo">Pseudo</label>
-    <input type="text" class="form-control" id="pseudo" name="pseudo" >
-    
-    <label for="exampleInputEmail1">Adresse e-mail</label>
-    <input type="email" class="form-control" id="Email1" aria-describedby="emailHelp" name="email">
-    <small id="emailHelp" class="form-text text-muted">Entrez une adresse valide svp</small>
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Mot de passe</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" name="password1">
-  </div>
-  <label for="exampleInputPassword2">Répétez le mot de passe</label>
-    <input type="password" class="form-control" id="exampleInputPassword2" name="password2">
-  </div><br>
- 
-  <button type="submit" class="btn btn-primary">Me Connecter</button>
-
-</form>
-
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
-    -->
-  </body>
-
-</html>
+function valid_donnees($donnees)
+{
+  $donnees = trim($donnees);
+  $donnees = stripslashes($donnees);
+  $donnees = htmlspecialchars($donnees);
+  return $donnees;
+}
+?>
+<?php require_once 'part/footer.php';

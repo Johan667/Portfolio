@@ -17,7 +17,7 @@ date_default_timezone_set(TIMEZONE_DEFAULT);
  */
 function redirectToRoute(string $target = '/')
 {
-    header('Location: '.$target);
+    header('Location: ' . $target);
     exit();
 }
 
@@ -27,10 +27,10 @@ function redirectToRoute(string $target = '/')
 function miniToken(string $token = 'token')
 {
     $alpha = str_shuffle(
-                implode(range('a', 'z'))
-               .implode(range('A', 'Z'))
-               .implode(range(0, 9))
-            );
+        implode(range('a', 'z'))
+            . implode(range('A', 'Z'))
+            . implode(range(0, 9))
+    );
 
     $_SESSION[$token] = $alpha;
 
@@ -54,9 +54,17 @@ function dump($variable, bool $type = false)
 {
     if (APP_ENV === 'dev') {
         if ($type === false) {
-            echo '<pre class="my-4">'.print_r($variable, true).'</pre>';
+            echo '<pre class="my-4">' . print_r($variable, true) . '</pre>';
         } else {
             var_dump($variable);
         }
     }
+}
+
+function addFlash(string $type, string $message)
+{
+    $_SESSION['msg-flash'] = [
+        'type' => $type,
+        'msg' => $message,
+    ];
 }
